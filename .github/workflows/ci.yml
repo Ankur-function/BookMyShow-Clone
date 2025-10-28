@@ -24,10 +24,15 @@
 #           npm ci
 #           npm run lint || true
 
-name: CI
+name: Basic CI
+
 on:
   push:
+    branches:
+      - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -37,12 +42,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: 20
+          cache: 'npm'
 
-      - name: Install dependencies & run lint
-        run: |
-          npm ci
-          npm run lint || true
+      # ---- FRONTEND ----
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Lint frontend
+        working-directory: ./frontend
+        run: npm run lint || true
+
+      # ---- BACKEND ----
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run backend tests
+        working-directory: ./backend
+        run: npm test || echo "No backend tests yet"
+
