@@ -1,3 +1,29 @@
+# name: CI
+# on:
+#   push:
+#   pull_request:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         project: [backend, frontend]
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+
+#       - name: Install dependencies & run lint
+#         run: |
+#           cd ${{ matrix.project }}
+#           npm ci
+#           npm run lint || true
+
 name: CI
 on:
   push:
@@ -6,9 +32,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: [backend, frontend]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,6 +44,5 @@ jobs:
 
       - name: Install dependencies & run lint
         run: |
-          cd ${{ matrix.project }}
           npm ci
           npm run lint || true
